@@ -56,3 +56,7 @@ def delete(id):
     db.session.delete(student)
     db.session.commit()
     return redirect(url_for('display'))
+
+@app.route('/daa')
+def daa():
+    return render_template('display')
