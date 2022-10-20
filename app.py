@@ -60,3 +60,4 @@ def delete(id):
 @app.route('/daa')
 def daa():
     return render_template('display')
+
