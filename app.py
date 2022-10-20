@@ -61,3 +61,6 @@ def delete(id):
 def daa():
     return render_template('display')
 
+@app.route('/daata')
+def daa():
+    return render_template('display')
