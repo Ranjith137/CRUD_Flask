@@ -31,6 +31,7 @@
                 <td>{{data.lname}}</td>
                 <td>{{data.email}}</td>
                 <td><a href =  "{{url_for('delete', id=data.id)}}" >Delete</a></td>
+                <td><a href =  "{{url_for('update', id=data.id)}}" >Update</a></td>
 
             </tr>
         {% endfor %}

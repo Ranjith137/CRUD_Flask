@@ -6,6 +6,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:root@localhost:5432/ran'
 db = SQLAlchemy(app)
 
+
 class Student(db.Model):
     __tablename__ = 'students'
     id = db.Column(db.Integer, primary_key=True)
@@ -21,9 +22,11 @@ class Student(db.Model):
 if __name__ == "__main__":
     app.run(debug=True)
 
+
 @app.route('/index')
 def index():
     return render_template('index.html')
+
 
 @app.route('/submit', methods=['POST'])
 def submit():
@@ -37,9 +40,11 @@ def submit():
         db.session.commit()
         return redirect(url_for('display'))
 
+
 conn = psycopg2.connect(database="ran", user="postgres", password="root", host="localhost")
 
 mycursor = conn.cursor()
+
 
 @app.route('/display')
 def display():
@@ -50,6 +55,7 @@ def display():
     # return "Hi"
     return render_template('display.html', data=data)
 
+
 @app.route('/delete/<int:id>')
 def delete(id):
     student = Student.query.get(id)
@@ -57,10 +63,15 @@ def delete(id):
     db.session.commit()
     return redirect(url_for('display'))
 
-@app.route('/daa')
-def daa():
-    return render_template('display')
 
-@app.route('/daata')
-def daa():
-    return render_template('display')
+@app.route('/update/<int:id>', methods=['GET', 'POST'])
+def update(id):
+    student = Student.query.get(id)
+    if request.method == 'GET':
+        return render_template('update.html', student = student)
+    if  request.method == 'POST':
+        student.fname = request.form['fname']
+        student.lname = request.form['lname']
+        student.email = request.form['email']
+        db.session.commit()
+        return redirect(url_for('display'))
