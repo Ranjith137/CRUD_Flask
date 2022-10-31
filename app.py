@@ -40,7 +40,7 @@ def home(header,code,name,reason):
     # code = random.choice(range(100000, 999999))  # generating 6 digit random code
     # header = "Forklift Forget Password Successfully"
     msg = Message(header, sender='ranjith@erssmail.com', recipients=["karthick@erssmail.com"])
-    msg.html = render_template("mail.html", name=name, OTP=code, reason=reason)
+    msg.html = render_template("sendmail.html", name=name, OTP=code, reason=reason)
     mail.send(msg)
     return 'Sent'
 
@@ -51,10 +51,10 @@ def index():
     header = "Forklift Registration Successful"
     header1 = "Reset your Forklift password"
     name = "Ranjith"
-    reason = "This is to inform you that you have registered successfully with Forklift Warehouse."
+    reason = "This is to inform you that you have registered successfully with Forklift Warehouse account."
     reason1 = "We have received a request to reset the password for your Forklift Warehouse account."
 
-    sendmail = home(header,code,name,reason)
+    sendmail = home(header1,code,name,reason1)
     if sendmail == "Sent":
         return 'Sent'
     else:
