@@ -1,10 +1,23 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
+from flask_mail import Mail, Message
+import random
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:root@localhost:5432/ran'
 db = SQLAlchemy(app)
+
+mail = Mail(app)  # instantiate the mail class
+
+# configuration of mail
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'ranjith@erssmail.com'
+app.config['MAIL_PASSWORD'] = 'ERSS@123'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
 
 
 class Student(db.Model):
@@ -22,10 +35,30 @@ class Student(db.Model):
 if __name__ == "__main__":
     app.run(debug=True)
 
+# @app.route('/')
+def home(header,code,name,reason):
+    # code = random.choice(range(100000, 999999))  # generating 6 digit random code
+    # header = "Forklift Forget Password Successfully"
+    msg = Message(header, sender='ranjith@erssmail.com', recipients=["karthick@erssmail.com"])
+    msg.html = render_template("mail.html", name=name, OTP=code, reason=reason)
+    mail.send(msg)
+    return 'Sent'
 
-@app.route('/index')
+
+@app.route('/')
 def index():
-    return render_template('index.html')
+    code = random.choice(range(100000, 999999))  # generating 6 digit random code
+    header = "Forklift Registration Successful"
+    header1 = "Reset your Forklift password"
+    name = "Ranjith"
+    reason = "This is to inform you that you have registered successfully with Forklift Warehouse."
+    reason1 = "We have received a request to reset the password for your Forklift Warehouse account."
+
+    sendmail = home(header,code,name,reason)
+    if sendmail == "Sent":
+        return 'Sent'
+    else:
+        return render_template('index.html')
 
 
 @app.route('/submit', methods=['POST'])
